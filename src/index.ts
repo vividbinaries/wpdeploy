@@ -20,7 +20,11 @@ const source = new NodeSSH()
 const target = new NodeSSH()
 const sourceWp = process.env.SOURCE_WP
 const targetWp = process.env.TARGET_WP
-const time = new Date().toISOString().replace('T', '-').replace(/:/g, '-').slice(0, -5)
+const time = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+  .toISOString()
+  .replace('T', '-')
+  .replace(/:/g, '-')
+  .slice(0, -5)
 
 /*
 |--------------------------------------------------------------------------
