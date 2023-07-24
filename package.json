@@ -1,6 +1,6 @@
 {
   "name": "vbwpdeploy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Deployment tool for WordPress.",
   "repository": "vividbinaries/wpdeploy",
   "author": "Muris Ceman <muris@vividbinaries.com>",
