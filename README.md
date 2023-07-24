@@ -24,5 +24,5 @@ To get started, follow these steps:
 4. Run the following command to execute the deployment process:
 
    ```bash
-   npx wpdeploy
+   npx vbwpdeploy
    ```

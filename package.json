@@ -1,5 +1,5 @@
 {
-  "name": "wpdeploy",
+  "name": "vbwpdeploy",
   "version": "1.0.0",
   "description": "Deployment tool for WordPress.",
   "repository": "vividbinaries/wpdeploy",
@@ -7,7 +7,7 @@
   "license": "MIT",
   "main": "dist/index.js",
   "bin": {
-    "wpdeploy": "dist/index.js"
+    "vbwpdeploy": "dist/index.js"
   },
   "type": "module",
   "files": [
