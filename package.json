@@ -1,5 +1,5 @@
 {
-  "name": "@vividbinaries/wpdeploy",
+  "name": "wpdeploy",
   "version": "1.0.0",
   "description": "Deployment tool for WordPress.",
   "repository": "vividbinaries/wpdeploy",
@@ -7,7 +7,7 @@
   "license": "MIT",
   "main": "dist/index.js",
   "bin": {
-    "@vividbinaries/wpdeploy": "dist/index.js"
+    "wpdeploy": "dist/index.js"
   },
   "type": "module",
   "files": [

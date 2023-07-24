@@ -92,11 +92,11 @@ await Promise.all([
 
 fs.ensureDirSync(resolve(process.cwd(), 'backup', 'theme'))
 fs.ensureDirSync(resolve(process.cwd(), 'backup', 'plugins'))
-fs.ensureDirSync(resolve(tmpdir(), 'vividbinaries-wpdeploy'))
+fs.ensureDirSync(resolve(tmpdir(), 'wpdeploy'))
 
 await Promise.all([
   source.getFile(
-    resolve(tmpdir(), 'vividbinaries-wpdeploy', `${themeName}-${time}.zip`),
+    resolve(tmpdir(), 'wpdeploy', `${themeName}-${time}.zip`),
     `${sourceWp}/wp-content/themes/${themeName}.zip`,
   ),
   target.getFile(
@@ -126,10 +126,7 @@ if (deploy === 'themePlugins') {
   ])
 
   await Promise.all([
-    source.getFile(
-      resolve(tmpdir(), 'vividbinaries-wpdeploy', `plugins-${time}.zip`),
-      `${sourceWp}/wp-content/plugins.zip`,
-    ),
+    source.getFile(resolve(tmpdir(), 'wpdeploy', `plugins-${time}.zip`), `${sourceWp}/wp-content/plugins.zip`),
     target.getFile(
       resolve(process.cwd(), 'backup', 'plugins', `plugins-${time}.zip`),
       `${targetWp}/wp-content/plugins.zip`,
@@ -150,15 +147,12 @@ console.log()
 consola.info('Deploying...')
 
 await target.putFile(
-  resolve(tmpdir(), 'vividbinaries-wpdeploy', `${themeName}-${time}.zip`),
+  resolve(tmpdir(), 'wpdeploy', `${themeName}-${time}.zip`),
   `${targetWp}/wp-content/themes/${themeName}.zip`,
 )
 
 if (deploy === 'themePlugins') {
-  await target.putFile(
-    resolve(tmpdir(), 'vividbinaries-wpdeploy', `plugins-${time}.zip`),
-    `${targetWp}/wp-content/plugins.zip`,
-  )
+  await target.putFile(resolve(tmpdir(), 'wpdeploy', `plugins-${time}.zip`), `${targetWp}/wp-content/plugins.zip`)
 }
 
 await target.execCommand(`touch ${targetWp}/.maintenance`)
@@ -196,8 +190,8 @@ await target.execCommand(`rm ${targetWp}/wp-content/plugins.zip`)
 await source.execCommand(`rm ${sourceWp}/wp-content/themes/${themeName}.zip`)
 await source.execCommand(`rm ${sourceWp}/wp-content/plugins.zip`)
 
-fs.removeSync(resolve(tmpdir(), 'vividbinaries-wpdeploy', `${themeName}-${time}.zip`))
-fs.removeSync(resolve(tmpdir(), 'vividbinaries-wpdeploy', `plugins-${time}.zip`))
+fs.removeSync(resolve(tmpdir(), 'wpdeploy', `${themeName}-${time}.zip`))
+fs.removeSync(resolve(tmpdir(), 'wpdeploy', `plugins-${time}.zip`))
 
 consola.success('All done!')
 console.log()
