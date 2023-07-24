@@ -1,0 +1,43 @@
+{
+  "name": "@vividbinaries/wpdeploy",
+  "version": "1.0.0",
+  "description": "Deployment tool for WordPress.",
+  "repository": "vividbinaries/wpdeploy",
+  "author": "Muris Ceman <muris@vividbinaries.com>",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "bin": {
+    "@vividbinaries/wpdeploy": "dist/index.js"
+  },
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "esbuild ./src/index.ts --platform=node --outfile=./dist/index.js",
+    "deploy": "pnpm build && pnpm start",
+    "format": "prettier --write .",
+    "release": "pnpm build && pnpm format && pnpm publish",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "consola": "^3.2.3",
+    "dotenv": "^16.3.1",
+    "esbuild": "^0.18.16",
+    "fs-extra": "^11.1.1",
+    "node-ssh": "^13.1.0",
+    "picocolors": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.1",
+    "prettier": "^3.0.0"
+  },
+  "packageManager": "pnpm@8.6.6",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": "^14.18.0 || >=16.10.0"
+  }
+}
