@@ -20,6 +20,8 @@ const source = new NodeSSH()
 const target = new NodeSSH()
 const sourceWp = process.env.SOURCE_WP
 const targetWp = process.env.TARGET_WP
+const sourceTheme = process.env.SOURCE_THEME_NAME
+const targetTheme = process.env.TARGET_THEME_NAME
 const time = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
   .toISOString()
   .replace('T', '-')
@@ -83,15 +85,12 @@ console.clear()
 */
 consola.info('Preparing theme...')
 
-const firstItem = await source.execCommand('ls -AU | head -1', { cwd: `${sourceWp}/wp-content/themes` })
-const themeName = firstItem.stdout.split('.')[0]
-
-await source.execCommand(`rm ${sourceWp}/wp-content/themes/${themeName}.zip`)
-await target.execCommand(`rm ${targetWp}/wp-content/themes/${themeName}.zip`)
+await source.execCommand(`rm ${sourceWp}/wp-content/themes/${sourceTheme}.zip`)
+await target.execCommand(`rm ${targetWp}/wp-content/themes/${targetTheme}.zip`)
 
 await Promise.all([
-  source.execCommand(`zip ${themeName}.zip -r ${themeName}`, { cwd: `${sourceWp}/wp-content/themes` }),
-  target.execCommand(`zip ${themeName}.zip -r ${themeName}`, { cwd: `${targetWp}/wp-content/themes` }),
+  source.execCommand(`zip ${sourceTheme}.zip -r ${sourceTheme}`, { cwd: `${sourceWp}/wp-content/themes` }),
+  target.execCommand(`zip ${targetTheme}.zip -r ${targetTheme}`, { cwd: `${targetWp}/wp-content/themes` }),
 ])
 
 fs.ensureDirSync(resolve(process.cwd(), 'backup', 'theme'))
@@ -100,16 +99,16 @@ fs.ensureDirSync(resolve(tmpdir(), 'vbwpdeploy'))
 
 await Promise.all([
   source.getFile(
-    resolve(tmpdir(), 'vbwpdeploy', `${themeName}-${time}.zip`),
-    `${sourceWp}/wp-content/themes/${themeName}.zip`,
+    resolve(tmpdir(), 'vbwpdeploy', `${sourceTheme}-${time}.zip`),
+    `${sourceWp}/wp-content/themes/${sourceTheme}.zip`,
   ),
   target.getFile(
-    resolve(process.cwd(), 'backup', 'theme', `${themeName}-${time}.zip`),
-    `${targetWp}/wp-content/themes/${themeName}.zip`,
+    resolve(process.cwd(), 'backup', 'theme', `${targetTheme}-${time}.zip`),
+    `${targetWp}/wp-content/themes/${targetTheme}.zip`,
   ),
 ])
 
-consola.success('Created', pc.cyan(`wp-content/themes/${themeName}.zip`))
+consola.success('Created', pc.cyan(`wp-content/themes/${targetTheme}.zip`))
 
 /*
 |--------------------------------------------------------------------------
@@ -151,8 +150,8 @@ console.log()
 consola.info('Deploying...')
 
 await target.putFile(
-  resolve(tmpdir(), 'vbwpdeploy', `${themeName}-${time}.zip`),
-  `${targetWp}/wp-content/themes/${themeName}.zip`,
+  resolve(tmpdir(), 'vbwpdeploy', `${sourceTheme}-${time}.zip`),
+  `${targetWp}/wp-content/themes/${targetTheme}.zip`,
 )
 
 if (deploy === 'themePlugins') {
@@ -161,13 +160,13 @@ if (deploy === 'themePlugins') {
 
 await target.execCommand(`touch ${targetWp}/.maintenance`)
 
-await target.execCommand(`rm -r ${targetWp}/wp-content/themes/${themeName}`)
+await target.execCommand(`rm -r ${targetWp}/wp-content/themes/${targetTheme}`)
 
 if (deploy === 'themePlugins') {
   await target.execCommand(`rm -r ${targetWp}/wp-content/plugins`)
 }
 
-await target.execCommand(`unzip ${themeName}.zip`, { cwd: `${targetWp}/wp-content/themes` })
+await target.execCommand(`unzip ${targetTheme}.zip`, { cwd: `${targetWp}/wp-content/themes` })
 
 if (deploy === 'themePlugins') {
   await target.execCommand('unzip plugins.zip', { cwd: `${targetWp}/wp-content` })
@@ -189,12 +188,12 @@ console.log()
 consola.info('Cleaning up...')
 
 await target.execCommand(`rm ${targetWp}/.maintenance`)
-await target.execCommand(`rm ${targetWp}/wp-content/themes/${themeName}.zip`)
+await target.execCommand(`rm ${targetWp}/wp-content/themes/${targetTheme}.zip`)
 await target.execCommand(`rm ${targetWp}/wp-content/plugins.zip`)
-await source.execCommand(`rm ${sourceWp}/wp-content/themes/${themeName}.zip`)
+await source.execCommand(`rm ${sourceWp}/wp-content/themes/${sourceTheme}.zip`)
 await source.execCommand(`rm ${sourceWp}/wp-content/plugins.zip`)
 
-fs.removeSync(resolve(tmpdir(), 'vbwpdeploy', `${themeName}-${time}.zip`))
+fs.removeSync(resolve(tmpdir(), 'vbwpdeploy', `${sourceTheme}-${time}.zip`))
 fs.removeSync(resolve(tmpdir(), 'vbwpdeploy', `plugins-${time}.zip`))
 
 consola.success('All done!')
